@@ -10,6 +10,7 @@ def degene(x):
 def fitness_calc(individual):
     return degene(individual) ** 2
 
+
 def cross_breed(parent1, parent2):
  
     a = np.random.randint(0, len(parent1))
