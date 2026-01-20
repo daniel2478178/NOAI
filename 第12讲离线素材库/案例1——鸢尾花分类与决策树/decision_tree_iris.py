@@ -3,20 +3,21 @@
 
 
 # logistic_regression_experiment
-import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
-from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import classification_report  # 预测回归结果分析工具
+from sklearn.tree import DecisionTreeClassifier, plot_tree
 
 def load_datafromexcel(path): 
     #统一格式为：第0行为header行，第0列为index列，最后一列是label
-    df = pd.read_excel(path, header = 0, index_col = 0)
-    X = df[df.columns[:-1]].values
-    y = df[df.columns[-1]].values
-
+    Sample_excel = pd.read_csv(path, header = 0, index_col = 0)
+    Sample = Sample_excel.values  #转成numpy数组
+    y = Sample[:,Sample.shape[1]-1]
+    #print(y)
+    X = Sample[:,0:Sample.shape[1]-1]
+    #print(X)
     return X,y
 
 def draw_figure(X,y,clf): #画图函数
@@ -41,18 +42,29 @@ def draw_figure(X,y,clf): #画图函数
     return
 
 if __name__ == '__main__':
-
+    X_train, y_train = load_datafromexcel(path = 'iris_2feature2label_train.csv')  #读取训练集数据
+    X_train = X_train[:,:2]
+    X_test, y_test = load_datafromexcel(path = 'iris_2feature2label_test.csv')  #读取训练集数据
+    X_test = X_test[:,:2]
     #训练模型
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    X_train, y_train = load_datafromexcel(path = 'iris_2feature2label_train.xlsx')  #读取训练集数据
-    X_test, y_test = load_datafromexcel(path = 'iris_2feature2label_test.xlsx')  #读取测试集数据
-    print(X_test,y_test)
-    clf = GaussianNB() #gaussian密度函数的naive bayes
+    #clf = DecisionTreeClassifier(max_depth=2) #决策树,不重复利用feature的话，只有两层
+    clf = DecisionTreeClassifier(max_depth=5) #决策树,不重复利用feature的话，只有两层
+    #当然也可以设定很多层
     clf.fit(X_train,y_train) #不管算法怎么执行的，直接进行模型建立
-
+    # training set的拟合准确率
+    y_predict_train = clf.predict(X_train)
+    print(classification_report(y_train,y_predict_train))
+    
+    # testing set的拟合准确率
+    y_predict_test = clf.predict(X_test)
+    print(classification_report(y_test,y_predict_test))
     
     draw_figure(X_train,y_train,clf) #train画图
+    plt.figure(2)
+    plot_tree(clf, filled=True)
+    plt.figure(3)
     draw_figure(X_test,y_test,clf) #test画图
+    
     
 
 
