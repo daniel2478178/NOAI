@@ -38,6 +38,7 @@ def draw_figure(X,y,clf): #画图函数
     plt.xlim(xx.min(), xx.max())
     plt.ylim(yy.min(), yy.max())
     plt.title("Iris 2 feature 2 label")   
+    plt.show()
     return
 
 if __name__ == '__main__':

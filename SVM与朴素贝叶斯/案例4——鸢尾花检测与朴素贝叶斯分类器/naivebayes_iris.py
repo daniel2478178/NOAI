@@ -6,9 +6,12 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 from matplotlib.colors import ListedColormap
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import classification_report  # 预测回归结果分析工具
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def load_datafromexcel(path): 
     #统一格式为：第0行为header行，第0列为index列，最后一列是label
